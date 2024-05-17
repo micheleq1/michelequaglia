@@ -34,12 +34,11 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session=request.getSession();
-         ProdottiDAO prodottiDAO = new ProdottiDAOimpl();
-        String id=request.getParameter("Id");
-        // Supponiamo che tu abbia un metodo per ottenere il prodotto dal suo ID
+        HttpSession session = request.getSession();
+        ProdottiDAO prodottiDAO = new ProdottiDAOimpl();
+        String id = request.getParameter("Id");
         Prodotto prodotto = prodottiDAO.getProductbyId(Integer.parseInt(id));
-        
+
         // Ottieni il carrello dalla sessione
         ArrayList<Prodotto> cart = (ArrayList<Prodotto>) session.getAttribute("cart");
         if (cart == null) {
@@ -47,11 +46,22 @@ public class AggiungiAlCarrelloServlet extends HttpServlet {
             session.setAttribute("cart", cart);
         }
 
-        // Aggiungi il prodotto al carrello
-        cart.add(prodotto);
+        // Verifica se il prodotto è già presente nel carrello
+        boolean isProductInCart = false;
+        for (Prodotto item : cart) {
+            if (item.getId() == prodotto.getId()) {
+                isProductInCart = true;
+                break;
+            }
+        }
+
+        // Se il prodotto non è già nel carrello, aggiungilo
+        if (!isProductInCart) {
+            cart.add(prodotto);
+        }
 
         // Reindirizza l'utente alla pagina iniziale o a un'altra pagina appropriata
-        RequestDispatcher dispatcher=request.getRequestDispatcher("index.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
         dispatcher.forward(request, response);
     }
 
