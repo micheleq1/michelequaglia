@@ -77,7 +77,7 @@ input[type="password"],
 textarea {
 
      border: none; /* Rimuove il bordo */
-    border-bottom: 2px solid #D2B48C; /* Aggiunge una linea di sotto */
+    border-bottom: 1px solid #ccc; /* Aggiunge una linea di sotto */
     padding: 10px; /* Aggiunge spazio intorno alla linea */
     box-sizing: border-box; /* Imposta il box-sizing a border-box per includere il padding nel calcolo della larghezza */
     background-color: transparent; 
@@ -91,18 +91,16 @@ textarea:focus {
 
 button {
     padding: 10px 30px;
-    background-color: transparent;
-    color: #D2B48C;
+    background-color: #D2B48C;
+    color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    font-weight:bold;
 }
 
 button:hover {
-    background-color:  #D2B48C;
-    color:#f9f9f9;
+    background-color:  #654321;
 }
 .error-message {
     background-color: #FFD2D2; /* Colore di sfondo */

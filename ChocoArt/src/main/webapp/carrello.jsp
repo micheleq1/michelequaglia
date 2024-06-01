@@ -73,7 +73,7 @@
         <div id="total-summary">
             <h3>Totale:</h3>
             <h3 id="total-price">0.00</h3>
-            <a href="AcquistaServlet">Acquista</a>
+            <a href="#">Acquista</a>
         </div>
     </div>
 
