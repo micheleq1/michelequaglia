@@ -5,8 +5,8 @@
 <head>
 <meta charset="ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="theme.css">
+<title>Acquista</title>
 </head>
 <body>
 <header>
@@ -14,17 +14,17 @@
             <h1 class="logo">ChocoArt</h1>
             <nav>
                 <ul>
+                  
                     <li><a href="index.jsp">Home</a></li>
-                    <%if (session.getAttribute("admin") != null && (Boolean) session.getAttribute("admin")) {%>
-                    <li><a href="LogoutServlet">Logout</a></li> <%} %>
                 </ul>
             </nav>
         </div>
     </header>
+    <form method="post" action="AcquistoCompletatoServlet">
+        <label for="carta">Dati Carta:</label>
+        <input type="text" name="carta" id="carta" pattern="[0-9]*">
+        
+        <button type="submit">Acquista</button>
+        </form>
 </body>
-<div class="filtri">
-        <a href="aggiungiprodotto.jsp"><button>AGGIUNGI PRODOTTO</button></a>
-        <button>ELIMINA PRODOTTO</button>
-        <a href="modificaprodotto.jsp"><button>MODIFICA PRODOTTO</button></a>
-    </div>
 </html>
