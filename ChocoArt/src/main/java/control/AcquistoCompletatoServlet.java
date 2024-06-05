@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import model.Ordine;
+import model.OrdiniDAO;
+import model.OrdiniDAOimpl;
 import model.Prodotto;
 
 /**
@@ -31,25 +34,17 @@ public class AcquistoCompletatoServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String nome = (String) session.getAttribute("name");
-        ArrayList<Prodotto> cart = (ArrayList<Prodotto>) session.getAttribute("cart");
-
-        if (nome != null && cart != null && !cart.isEmpty()) {
-            // Calcola il totale dell'ordine
-            double totale = 0;
-            for (Prodotto prodotto : cart) {
-                // Ottieni il valore di "quantity" dalla query string dell'URL
-                String quantityParam = request.getParameter("quantity_" + prodotto.getId());
-                // Verifica se il parametro è stato fornito e se è un numero valido
-                if (quantityParam != null && !quantityParam.isEmpty()) {
-                    int quantity = Integer.parseInt(quantityParam);
-                    totale += prodotto.getPrezzo() * quantity;
-                }
-            }
-            System.out.println("Totale: " + totale);
+       HttpSession session=request.getSession();
+           
+            OrdiniDAO aggiungi=new OrdiniDAOimpl();
+            Ordine ordine=new Ordine();
+            ordine.setTotale(Double.parseDouble((String)session.getAttribute("totale")));
+            int idUtente = aggiungi.getIdUtenteFromSession((String) session.getAttribute("name"));
+           
+            ordine.setIdUtente(idUtente);
+            aggiungi.aggiungiOrdine(ordine);
         }
-    }
+    
 
 
 	/**

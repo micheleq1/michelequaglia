@@ -29,6 +29,16 @@ header {
     text-align: center;
     font-weight: bold;
 }
+.container span{
+	
+    background-color: #D2B48C;
+    color: #333;
+    border-radius: 50%;
+    padding: 2px 6px;
+    margin-left: 5px;
+    font-weight: bold;
+
+}
 
 .logo {
     font-size: 30px;
@@ -90,13 +100,17 @@ textarea:focus {
 }
 
 button {
-    padding: 10px 30px;
-    background-color: #D2B48C;
-    color: #fff;
+        padding: 7px 7px;
+    background-color: transparent;
+    color: #D2B48C;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 5px;
+    font-size: medium;
 }
 
 button:hover {
@@ -116,6 +130,15 @@ button:hover {
     font-size: 18px; /* Dimensione del testo */
     font-weight: bold; /* Grassetto */
     margin: 0; /* Rimuovi il margine per il paragrafo interno */
+}
+.success-message p{
+	font-size: 18px; /* Dimensione del testo */
+    font-weight: bold; /* Grassetto */
+    margin: 0; 
+    background-color: #DFF0D8; 
+    color: #3C763D; 
+    padding: 10px; 
+    border-radius: 4px;
 }
 
 /* Stile generale per il contenitore dei prodotti */
@@ -275,6 +298,7 @@ button:hover {
 }
 
 
+
 .filtri {
     display: flex;
     justify-content: space-between;
@@ -340,7 +364,7 @@ button:hover {
 .order-summary h3{
 	color:#654321;;
 }
-.order-summary a{
+.order-summary a, button{
 	padding: 7px 7px;
     background-color: transparent;;
     color: #D2B48C;
@@ -351,7 +375,7 @@ button:hover {
     text-decoration: none;
     font-weight:bold;
 }
-.order-summary a:hover {
+.order-summary a, button:hover {
     background-color:  #D2B48C;
     color:#f9f9f9;
 }

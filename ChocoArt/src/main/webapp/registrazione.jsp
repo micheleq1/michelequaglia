@@ -28,7 +28,7 @@ if(status!=null){
 if(status.equals("email_exists")){
 %>
 <div class="error-message">
-<p>L'email è gia registrata, riprova con un'altra o accedi</p>
+<p>email o username gia registrati, riprova o accedi</p>
 </div>
 <%}
 if(status.equals("invalid_email")){ %>

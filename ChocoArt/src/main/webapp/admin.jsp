@@ -5,7 +5,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Insert title here</title>
+<title>Admin</title>
 <link rel="stylesheet" type="text/css" href="theme.css">
 </head>
 <body>
@@ -24,7 +24,7 @@
 </body>
 <div class="filtri">
         <a href="aggiungiprodotto.jsp"><button>AGGIUNGI PRODOTTO</button></a>
-        <button>ELIMINA PRODOTTO</button>
+        <a href="eliminaprodotto.jsp"><button>ELIMINA PRODOTTO</button></a>
         <a href="modificaprodotto.jsp"><button>MODIFICA PRODOTTO</button></a>
     </div>
 </html>

@@ -2,6 +2,7 @@
 <%@page import="java.util.Arrays"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="model.ProdottiDAO" %>
 <%@ page import="model.ProdottiDAOimpl" %>
 <%@ page import="model.Prodotto" %>
@@ -26,8 +27,13 @@
                         <li><a href="LogoutServlet">Logout</a></li>
                         <li style="color:#D2B48C; font-weight:bold">Ciao <%=session.getAttribute("name") %></li>
                         <li><a href="#">Preferiti</a></li>
-                    <% } %>
-                    <li><a href="carrello.jsp">Carrello</a></li>
+                   <% } 
+                    ArrayList<Prodotto> cart = (ArrayList<Prodotto>) session.getAttribute("cart");
+                    int elementi = 0;
+                    if(cart != null) {
+                        elementi = cart.size();
+                    } %>
+                    <li><a href="carrello.jsp">Carrello <% if (elementi > 0) { %><span><%= elementi %></span><% } %></a></li>
                 </ul>
             </nav>
         </div>

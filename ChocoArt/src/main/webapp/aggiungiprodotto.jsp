@@ -21,7 +21,9 @@
     <%
     if (request.getAttribute("aggiunto") != null && (boolean) request.getAttribute("aggiunto")) {
     %>
-    <p style="background-color: #DFF0D8; color: #3C763D; padding: 10px; border-radius: 4px;">Prodotto aggiunto con successo</p>
+    <div class="success-message">
+    <p>Prodotto aggiunto con successo</p>
+    </div>
     <%
     } else if (request.getAttribute("aggiunto") != null && !(boolean) request.getAttribute("aggiunto")) {
     %>

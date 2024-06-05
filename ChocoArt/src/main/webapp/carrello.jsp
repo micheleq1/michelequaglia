@@ -1,16 +1,5 @@
 <!DOCTYPE html>
 <%@ page import="java.util.ArrayList" %>
-    <%@ page import="model.Prodotto" %>
-
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="model.Prodotto" %>
-
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="model.Prodotto" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="model.Prodotto" %>
-
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="model.Prodotto" %>
 <html>
 <head>
@@ -18,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrello</title>
     <link rel="stylesheet" type="text/css" href="theme.css"> <!-- Link al file CSS -->
+    <script src="javascript/carrello.js"></script>
 </head>
 <body>
     <header>
@@ -73,7 +63,7 @@
         <div id="total-summary">
             <h3>Totale:</h3>
             <h3 id="total-price">0.00</h3>
-            <a href="AcquistaServlet">Acquista</a>
+            <button id="buy-btn">Acquista</button>
         </div>
     </div>
 
@@ -110,6 +100,26 @@
         window.onload = function() {
             updateOrderSummary();
         };
+
+        // Funzione per inviare il totale tramite AJAX
+        document.getElementById("buy-btn").addEventListener("click", function() {
+            var totalPrice = document.getElementById("total-price").innerText;
+
+            var xhr = new XMLHttpRequest();
+            var url = "PrezzoTotaleServlet?totalPrice=" + encodeURIComponent(totalPrice);
+            xhr.open("GET", url, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        console.log("Valore salvato con successo nella sessione.");
+                        window.location.href = "AcquistaServlet"; // Reindirizza alla servlet AcquistaServlet
+                    } else {
+                        console.error("Si è verificato un errore durante il salvataggio del valore nella sessione.");
+                    }
+                }
+            };
+            xhr.send();
+        });
     </script>
 </body>
 </html>

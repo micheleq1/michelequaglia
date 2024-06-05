@@ -24,6 +24,21 @@
             </nav>
         </div>
     </header>
+    <%
+    if (request.getAttribute("modifica") != null && (boolean) request.getAttribute("modifica")) {
+    %>
+    <div class="success-message">
+    <p>Prodotto modificato con successo</p>
+    </div>
+    <%
+    } else if (request.getAttribute("modifica") != null && !(boolean) request.getAttribute("modifica")) {
+    %>
+     <div class="error-message">
+        <p>Errore durante la modifica del prodotto</p>
+    </div>
+    <%
+    }
+    %>
      <div class="product-container">
     <% 
         ProdottiDAO prodottiDAO = new ProdottiDAOimpl();
@@ -32,30 +47,20 @@
     %>
     
     
-    <%
-    if (request.getAttribute("modifica") != null && (boolean) request.getAttribute("modifica")) {
-    %>
-    <p style="background-color: #DFF0D8; color: #3C763D; padding: 10px; border-radius: 4px;">Prodotto modificato con successo</p>
-    <%
-    } else if (request.getAttribute("modifica") != null && !(boolean) request.getAttribute("modifica")) {
-    %>
-     <div class="error-message">
-        <p>Errore durante l'aggiunta del prodotto</p>
-    </div>
-    <%
-    }
-    %>
+    
         <div class="product">
-        <form action="ModificaServlet?id=<%=prodotto.getId() %>" method="post">
+        <form action="ModificaServlet?id=<%=prodotto.getId() %>" method="post" enctype="multipart/form-data">
     <img src="data:image/jpg;base64, <%= new String(prodotto.getImmagine()) %>" alt="<%= prodotto.getNome() %>">
     <input type="text" name="nome" value="<%=prodotto.getNome() %>" required><br><br>
     <input type="text" name="prezzo" value="<%=prodotto.getPrezzo() %>" required><br><br>
     <input type="text" name="descrizione" value="<%=prodotto.getDescrizione() %>" required><br><br>
+    <input type="file" name="immagine" accept="image/*"><br><br>
     <button type="submit">Modifica</button>
     </form>
 </div>
         <!-- MANCA POTER MODIFICARE LA FOTO --> 
     <% } %>
     </div>
+    
 </body>
 </html>

@@ -56,7 +56,7 @@ public class RegistrationServlet extends HttpServlet {
 			if(email.contains("@")) {
 			 Class.forName("com.mysql.cj.jdbc.Driver");
 	            con =DriverManager.getConnection("jdbc:mysql://localhost:3306/chocoart","root","michelequaglia17");
-	            if(isEmailUnique(con, email)) {
+	            if(isEmailUnique(con, email)&&isUsernameUnique(con, username)) {
 	            String hashedPassword = hashPassword(password);
 	            PreparedStatement ps=con.prepareStatement("insert into utenti(username,email,password,indirizzo) values(?,?,?,?)");
 	            ps.setString(1, username);
@@ -120,5 +120,16 @@ public class RegistrationServlet extends HttpServlet {
 		    int count = rs.getInt(1);
 		    return count == 0; // Restituisce true se l'email è univoca, false altrimenti
 		}
+	 private boolean isUsernameUnique(Connection con, String username) throws SQLException {
+		    // Query per controllare se lo username esiste già nel database
+		    String query = "SELECT COUNT(*) FROM utenti WHERE username = ?";
+		    PreparedStatement ps = con.prepareStatement(query);
+		    ps.setString(1, username);
+		    ResultSet rs = ps.executeQuery();
+		    rs.next();
+		    int count = rs.getInt(1);
+		    return count == 0; // Restituisce true se lo username è univoco, false altrimenti
+		}
+
 
 }
