@@ -1,4 +1,5 @@
 <%@page import="model.Ordine"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="model.OrdiniDAOimpl"%>
 <%@page import="model.OrdiniDAO"%>
@@ -9,8 +10,9 @@
 <head>
 <meta charset="ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin</title>
-<link rel="stylesheet" type="text/css" href="theme.css">
+    
+<link rel="stylesheet" type="text/css" href="theme.css"> 
+<title>I Miei Ordini</title>
 </head>
 <body>
 <header>
@@ -18,28 +20,21 @@
             <h1 class="logo">ChocoArt</h1>
             <nav>
                 <ul>
+                  
                     <li><a href="index.jsp">Home</a></li>
-                    <%if (session.getAttribute("admin") != null && (Boolean) session.getAttribute("admin")) {%>
-                    <li><a href="LogoutServlet">Logout</a></li> <%} %>
                 </ul>
             </nav>
         </div>
     </header>
-</body>
-<div class="filtri">
-        <a href="aggiungiprodotto.jsp"><button>AGGIUNGI PRODOTTO</button></a>
-        <a href="eliminaprodotto.jsp"><button>ELIMINA PRODOTTO</button></a>
-        <a href="modificaprodotto.jsp"><button>MODIFICA PRODOTTO</button></a>
-    </div>
     
-    <%OrdiniDAO ord=new OrdiniDAOimpl();
-    List <Ordine> ordini=ord.tuttiOrdini();
-    for(Ordine ordine:ordini){ %>
-    <div class="order-info">
+    <%String nomeUtente = (String) session.getAttribute("name");
+    OrdiniDAO ordini=new OrdiniDAOimpl();
+   List<Ordine> ordiniUtente=ordini.getOrdiniUtenteFromSession(nomeUtente);
+   for(Ordine ordine:ordiniUtente){
+	   %>
+	  <div class="order-info">
     <label>Id ordine:</label>
     <div class="info info-detail"><%= ordine.getId() %></div>
-     <label>Id utente:</label>
-    <div class="info info-detail"><%= ordine.getIdUtente() %></div>
     <label>Data ordine:</label>
     <div class="info info-detail"><%= ordine.getDataOrdine() %></div>
     <label>Indirizzo:</label>
@@ -47,5 +42,6 @@
     <label>Totale:</label>
     <div class="info info-detail"><%= ordine.getTotale() %></div>
 </div>
-    <%} %>
+   <% }%>
+</body>
 </html>

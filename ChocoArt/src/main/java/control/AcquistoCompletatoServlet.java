@@ -42,7 +42,9 @@ public class AcquistoCompletatoServlet extends HttpServlet {
             int idUtente = aggiungi.getIdUtenteFromSession((String) session.getAttribute("name"));
            
             ordine.setIdUtente(idUtente);
+           ordine.setIndirizzo(request.getParameter("indirizzo"));
             aggiungi.aggiungiOrdine(ordine);
+            response.sendRedirect("acquistocompletato.jsp");
         }
     
 

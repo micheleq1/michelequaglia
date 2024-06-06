@@ -138,26 +138,30 @@ public class ProdottiDAOimpl implements ProdottiDAO {
 	}
 
 
-
 	@Override
 	public void updateProduct(Prodotto prodotto) {
-		try (Connection conn = getConnection();
-		         PreparedStatement ps = conn.prepareStatement("UPDATE prodotti SET nome = ?, prezzo = ?, descrizione = ?, immagine = ? WHERE id = ?")) {
-		        ps.setString(1, prodotto.getNome());
-		        ps.setDouble(2, prodotto.getPrezzo());
-		        ps.setString(3, prodotto.getDescrizione());
-		        ps.setInt(5, prodotto.getId());
-		        String immagineBase64 = Base64.getEncoder().encodeToString(prodotto.getImmagine());
-		        
-		        // Imposta la stringa Base64 nell'istruzione SQL
-		        ps.setString(4, immagineBase64); 
-		        
-		        // Esegue l'aggiornamento del prodotto nel database
-		        ps.executeUpdate();
-		    } catch (SQLException e) {
-		        e.printStackTrace();
-		    }
-		
+	    try (Connection conn = getConnection();
+	             PreparedStatement ps = conn.prepareStatement("UPDATE prodotti SET nome = ?, prezzo = ?, descrizione = ?, immagine = ? WHERE id = ?")) {
+	        ps.setString(1, prodotto.getNome());
+	        ps.setDouble(2, prodotto.getPrezzo());
+	        ps.setString(3, prodotto.getDescrizione());
+	        ps.setInt(5, prodotto.getId());
+
+	        byte[] immagine = prodotto.getImmagine();
+	        if (immagine != null && immagine.length > 0) {
+	            // Se è stata fornita una nuova immagine, esegui la codifica Base64
+	            String immagineBase64 = Base64.getEncoder().encodeToString(immagine);
+	            ps.setString(4, immagineBase64);
+	        } else {
+	            // Se non è stata fornita una nuova immagine, mantieni l'immagine esistente
+	            ps.setBytes(4, prodotto.getImmagine());
+	        }
+
+	        // Esegue l'aggiornamento del prodotto nel database
+	        ps.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 	}
 
 	@Override

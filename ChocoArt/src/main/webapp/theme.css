@@ -1,8 +1,19 @@
 /* Reset CSS per normalizzare i valori predefiniti dei browser */
-body, h1, h2, h3, p, ul, ol, li, figure, figcaption, blockquote, dl, dd, dt {
+body, h1, h2, p, ul, ol, li, figure, figcaption, blockquote, dl, dd, dt {
     margin: 0;
     padding: 0;
 }
+h3 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h4 {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 15px;
+        }
 
 body {
     font-family: Arial, sans-serif;
@@ -153,6 +164,7 @@ button:hover {
   margin-top: 3%;
 }
 
+
 .product {
   width: calc(20% - 20px); /* Occupa circa un quarto della larghezza del contenitore, sottraendo lo spazio tra i prodotti */
   border-radius: 10px; /* Bordo arrotondato */
@@ -163,8 +175,8 @@ button:hover {
 
 /* Stile per l'immagine del prodotto */
 .product img {
-  max-width: 100%;
-  height: auto;
+  max-width: 200px; /* Imposta una larghezza massima standard */
+  max-height: 200px;
   display: block;
   margin-bottom: 10px;
   border-radius: 10px; /* Bordo arrotondato anche per l'immagine */
@@ -246,11 +258,11 @@ button:hover {
 
 /* Stile per l'immagine del prodotto */
 .cart-container .product-image {
-    max-width: 60%; /* Larghezza massima dell'immagine */
-    height: auto; /* Altezza automatica per mantenere le proporzioni */
-    display: block;
-    margin-bottom: 10px;
-    border-radius: 10px;
+   max-width: 200px; /* Imposta una larghezza massima standard */
+  max-height: 200px;
+  display: block;
+  margin-bottom: 10px;
+  border-radius: 10px;
 }
 
 /* Stile per il nome del prodotto */
@@ -379,7 +391,56 @@ button:hover {
     background-color:  #D2B48C;
     color:#f9f9f9;
 }
+#dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
 
+#dropdown-content a {
+    color: black;
+    padding: 8px 12px; /* Riduci il padding per rendere l'area più piccola */
+    text-decoration: none;
+    display: block;
+    width: 160px; /* Riduci la larghezza per rendere l'area più piccola */
+    max-width: 160px; /* Imposta una larghezza massima per evitare che l'area si estenda troppo */
+    height: auto; /* Altezza automatica */
+    
+}
+
+#dropdown-content a:hover {
+            background-color: #D2B48C;
+            color: #f9f9f9;
+        }
+        
+        .order-info {
+    border: 1px solid #ccc; /* Bordo grigio */
+    border-radius: 5px; /* Bordo arrotondato */
+    padding: 10px; /* Spaziatura interna */
+    margin-bottom: 20px; /* Margine inferiore */
+    background-color: #f9f9f9; /* Colore di sfondo */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombra leggera */
+}
+
+/* Stile per le etichette delle informazioni dell'ordine */
+.order-info label {
+    display: block; /* Visualizza le etichette come blocchi */
+    font-weight: bold; /* Testo in grassetto */
+    margin-bottom: 5px; /* Margine inferiore */
+}
+
+/* Stile per le informazioni dell'ordine (id, data, indirizzo, totale) */
+.order-info .info {
+    margin-left: 20px; /* Aggiunge un margine sinistro per allineare con le etichette */
+}
+
+/* Stile per i dettagli dell'ordine (id, data, indirizzo, totale) */
+.order-info .info-detail {
+    color: #333; /* Colore del testo */
+}
 @media screen and (max-width: 600px) {
 	
     .filtri {
