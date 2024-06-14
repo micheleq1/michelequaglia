@@ -60,19 +60,5 @@ public class ModificaServlet extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("modificaprodotto.jsp");
         dispatcher.forward(request, response);
     }
-
-
-    // Metodo per verificare se l'estensione del file è un'immagine supportata
-    private boolean isImage(String fileExtension) {
-        List<String> imageExtensions = Arrays.asList("jpg", "jpeg", "png", "gif", "bmp");
-        return imageExtensions.contains(fileExtension.toLowerCase());
-    }
-
-    // Metodo per ottenere l'estensione di un file
-    private String getFileExtension(String fileName) {
-        if (fileName != null && fileName.lastIndexOf(".") > 0) {
-            return fileName.substring(fileName.lastIndexOf(".") + 1);
-        }
-        return "";
-    }
 }
+

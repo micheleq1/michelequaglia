@@ -1,10 +1,13 @@
 package control;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,53 +22,42 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+    private static final long serialVersionUID = 1L;
+
     public LoginServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String email=request.getParameter("email");
-		String password=request.getParameter("password");
-		RequestDispatcher disp=null;
-		Connection con=null;
-		HttpSession session=request.getSession();
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-            con =DriverManager.getConnection("jdbc:mysql://localhost:3306/chocoart","root","michelequaglia17");
-            PreparedStatement ps=con.prepareStatement("select * from utenti where email=? and password=?");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        RequestDispatcher disp = null;
+        Connection con = null;
+        HttpSession session = request.getSession();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/chocoart", "root", "michelequaglia17");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM utenti WHERE email=?");
             ps.setString(1, email);
-            ps.setString(2, password);
-            
+
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                String ruolo = rs.getString("ruolo");
-                if (ruolo != null && ruolo.equals("admin")) {
-                    session.setAttribute("admin", true);
-                    disp = request.getRequestDispatcher("admin.jsp");
+                String storedHashedPassword = rs.getString("password");
+                if (checkPassword(password, storedHashedPassword)) {
+                    String ruolo = rs.getString("ruolo");
+                    if (ruolo != null && ruolo.equals("admin")) {
+                        session.setAttribute("admin", true);
+                        disp = request.getRequestDispatcher("admin.jsp");
+                    } else {
+                        session.setAttribute("admin", false);
+                        session.setAttribute("name", rs.getString("username"));
+                        disp = request.getRequestDispatcher("index.jsp");
+                    }
+                    request.setAttribute("status", "success");
                 } else {
-                    session.setAttribute("admin", false);
-                    session.setAttribute("name", rs.getString("username"));
-        
-                    disp = request.getRequestDispatcher("index.jsp");
+                    request.setAttribute("status", "failed");
+                    disp = request.getRequestDispatcher("login.jsp");
                 }
-                request.setAttribute("status", "success");
             } else {
                 request.setAttribute("status", "failed");
                 disp = request.getRequestDispatcher("login.jsp");
@@ -73,9 +65,38 @@ public class LoginServlet extends HttpServlet {
 
             disp.forward(request, response);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (con != null)
+                    con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    private boolean checkPassword(String password, String storedHashedPassword) {
+        String hashedPassword = hashPassword(password);
+        return hashedPassword.equals(storedHashedPassword);
+    }
+
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = md.digest(password.getBytes());
+
+            // Converte i byte in una rappresentazione esadecimale
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
+

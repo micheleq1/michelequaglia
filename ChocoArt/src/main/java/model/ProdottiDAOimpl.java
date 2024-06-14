@@ -141,7 +141,8 @@ public class ProdottiDAOimpl implements ProdottiDAO {
 	@Override
 	public void updateProduct(Prodotto prodotto) {
 	    try (Connection conn = getConnection();
-	             PreparedStatement ps = conn.prepareStatement("UPDATE prodotti SET nome = ?, prezzo = ?, descrizione = ?, immagine = ? WHERE id = ?")) {
+	         PreparedStatement ps = conn.prepareStatement("UPDATE prodotti SET nome = ?, prezzo = ?, descrizione = ?, immagine = ? WHERE id = ?")) {
+	        
 	        ps.setString(1, prodotto.getNome());
 	        ps.setDouble(2, prodotto.getPrezzo());
 	        ps.setString(3, prodotto.getDescrizione());
@@ -149,15 +150,15 @@ public class ProdottiDAOimpl implements ProdottiDAO {
 
 	        byte[] immagine = prodotto.getImmagine();
 	        if (immagine != null && immagine.length > 0) {
-	            // Se è stata fornita una nuova immagine, esegui la codifica Base64
-	            String immagineBase64 = Base64.getEncoder().encodeToString(immagine);
-	            ps.setString(4, immagineBase64);
+	            // If a new image is provided, set it
+	            ps.setBytes(4, immagine);
 	        } else {
-	            // Se non è stata fornita una nuova immagine, mantieni l'immagine esistente
-	            ps.setBytes(4, prodotto.getImmagine());
+	            // If no new image is provided, fetch the existing image from the database
+	            Prodotto existingProduct = getProductbyId(prodotto.getId());
+	            ps.setBytes(4, existingProduct.getImmagine());
 	        }
 
-	        // Esegue l'aggiornamento del prodotto nel database
+	        // Execute the update
 	        ps.executeUpdate();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
