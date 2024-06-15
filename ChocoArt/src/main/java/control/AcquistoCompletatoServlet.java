@@ -40,7 +40,7 @@ public class AcquistoCompletatoServlet extends HttpServlet {
             Ordine ordine=new Ordine();
             ordine.setTotale(Double.parseDouble((String)session.getAttribute("totale")));
             int idUtente = aggiungi.getIdUtenteFromSession((String) session.getAttribute("name"));
-           
+           ordine.setProdotti((ArrayList<Prodotto>)session.getAttribute("cart"));
             ordine.setIdUtente(idUtente);
            ordine.setIndirizzo(request.getParameter("indirizzo"));
             aggiungi.aggiungiOrdine(ordine);

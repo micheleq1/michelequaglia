@@ -38,6 +38,7 @@ public class RimuoviDalCarrelloServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String id = request.getParameter("Id");
         
+        
         // Ottieni l'ID del prodotto da rimuovere dal carrello
         int productIdToRemove = Integer.parseInt(id);
         

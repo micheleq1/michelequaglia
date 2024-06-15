@@ -2,6 +2,8 @@ package model;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Ordine {
     private int id;
@@ -9,6 +11,7 @@ public class Ordine {
     private Timestamp dataOrdine;
     private Double totale;
     private String indirizzo;
+    private List<Prodotto> prodotti=new ArrayList<Prodotto>();
 
     // Costruttore vuoto
     public Ordine() {}
@@ -67,5 +70,19 @@ public class Ordine {
 
 	public void setIndirizzo(String indirizzo) {
 		this.indirizzo = indirizzo;
+	}
+
+
+
+
+	public List<Prodotto> getProdotti() {
+		return prodotti;
+	}
+
+
+
+
+	public void setProdotti(List<Prodotto> prodotti) {
+		this.prodotti = prodotti;
 	}
 }

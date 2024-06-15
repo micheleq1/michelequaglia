@@ -26,20 +26,47 @@ public class OrdiniDAOimpl implements OrdiniDAO {
     
 
 	@Override
+	
 	public boolean aggiungiOrdine(Ordine ordine) {
-	    String sql = "INSERT INTO ordini (id_utente, totale, indirizzo) VALUES (?, ?, ?)";
+	    String sqlOrdine = "INSERT INTO ordini (id_utente, totale, indirizzo) VALUES (?, ?, ?)";
+	    String sqlOrdineProdotti = "INSERT INTO ordine_prodotti (id_ordine, id_prodotto, prezzo_prodotto) VALUES (?, ?, ?)";
+
 	    try (Connection conn = getConnection();
-	         PreparedStatement stmt = conn.prepareStatement(sql)) {
-	        stmt.setInt(1, ordine.getIdUtente());
-	        stmt.setDouble(2, ordine.getTotale());
-	        stmt.setString(3, ordine.getIndirizzo());
-	        int rowsAffected = stmt.executeUpdate();
-	        return rowsAffected > 0;
+	         PreparedStatement stmtOrdine = conn.prepareStatement(sqlOrdine, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+	        // Inserisci l'ordine
+	        stmtOrdine.setInt(1, ordine.getIdUtente());
+	        stmtOrdine.setDouble(2, ordine.getTotale());
+	        stmtOrdine.setString(3, ordine.getIndirizzo());
+	        
+	        int rowsAffected = stmtOrdine.executeUpdate();
+
+	        if (rowsAffected > 0) {
+	            // Ottieni l'ID dell'ordine generato
+	            try (ResultSet generatedKeys = stmtOrdine.getGeneratedKeys()) {
+	                if (generatedKeys.next()) {
+	                    long ordineId = generatedKeys.getLong(1);
+
+	                    // Inserisci i prodotti dell'ordine
+	                    try (PreparedStatement stmtOrdineProdotti = conn.prepareStatement(sqlOrdineProdotti)) {
+	                        for (Prodotto p:ordine.getProdotti()) {
+	                            stmtOrdineProdotti.setLong(1, ordineId);
+	                            stmtOrdineProdotti.setInt(2, p.getId());
+	                            stmtOrdineProdotti.setDouble(3, p.getPrezzo());
+	                            stmtOrdineProdotti.addBatch();
+	                        }
+	                        stmtOrdineProdotti.executeBatch();
+	                    }
+	                    return true;
+	                }
+	            }
+	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	        return false;
 	    }
+	    return false;
 	}
+
 
 
     @Override
@@ -160,9 +187,6 @@ public class OrdiniDAOimpl implements OrdiniDAO {
     
     @Override
     public List<Ordine> getOrdiniUtenteFromSession(String nomeUtente) {
-        // Ottieni il nome utente dalla sessione
-        
-
         // Ottieni l'ID utente utilizzando il nome utente
         int idUtente = getIdUtenteFromSession(nomeUtente);
 
@@ -171,27 +195,50 @@ public class OrdiniDAOimpl implements OrdiniDAO {
 
         // Se l'ID utente è valido, esegui la query per ottenere gli ordini dell'utente
         if (idUtente != -1) {
-            String sql = "SELECT * FROM ordini WHERE id_utente = ?";
+            String sql = "SELECT o.id AS id_ordine, o.id_utente, o.data_ordine, o.totale, o.indirizzo, " +
+                         "p.id AS id_prodotto, p.nome, op.prezzo_prodotto AS prezzo_prodotto " +
+                         "FROM ordine_prodotti op " +
+                         "JOIN ordini o ON op.id_ordine = o.id " +
+                         "JOIN prodotti p ON op.id_prodotto = p.id " +
+                         "WHERE o.id_utente = ?";
             try (Connection conn = getConnection();
                  PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, idUtente);
                 try (ResultSet rs = stmt.executeQuery()) {
+                    Ordine ordineCorrente = null;
+                    int ultimoIdOrdine = -1;
                     while (rs.next()) {
-                        Ordine ordine = new Ordine();
-                        ordine.setId(rs.getInt("id"));
-                        ordine.setIdUtente(rs.getInt("id_utente"));
-                        ordine.setDataOrdine(rs.getTimestamp("data_ordine"));
-                        ordine.setTotale(rs.getDouble("totale"));
-                        ordine.setIndirizzo(rs.getString("indirizzo"));
-                        ordiniUtente.add(ordine);
+                        int idOrdine = rs.getInt("id_ordine");
+                        if (idOrdine != ultimoIdOrdine) {
+                            if (ordineCorrente != null) {
+                                ordiniUtente.add(ordineCorrente);
+                            }
+                            ordineCorrente = new Ordine();
+                            ordineCorrente.setId(idOrdine);
+                            ordineCorrente.setIdUtente(rs.getInt("id_utente"));
+                            ordineCorrente.setDataOrdine(rs.getTimestamp("data_ordine"));
+                            ordineCorrente.setTotale(rs.getDouble("totale"));
+                            ordineCorrente.setIndirizzo(rs.getString("indirizzo"));
+                            ultimoIdOrdine = idOrdine;
+                        }
+                        Prodotto prodotto = new Prodotto();
+                        prodotto.setId(rs.getInt("id_prodotto"));
+                        prodotto.setNome(rs.getString("nome"));
+                        prodotto.setPrezzo(rs.getDouble("prezzo_prodotto"));
+                        ordineCorrente.getProdotti().add(prodotto);
+                    }
+                    if (ordineCorrente != null) {
+                        ordiniUtente.add(ordineCorrente);
                     }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
+                // Gestione dell'eccezione (registrazione, notifica, fallback)
             }
         }
         return ordiniUtente;
     }
+
 
 
    

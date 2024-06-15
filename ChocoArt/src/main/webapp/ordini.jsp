@@ -1,3 +1,4 @@
+<%@page import="model.Prodotto"%>
 <%@page import="model.Ordine"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -16,32 +17,57 @@
 </head>
 <body>
 <header>
-        <div class="container">
-            <h1 class="logo">ChocoArt</h1>
-            <nav>
+    <div class="container">
+        <h1 class="logo">ChocoArt</h1>
+        <nav>
+            <ul>
+                <li><a href="index.jsp">Home</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<div class="container">
+    <div class="orders-container">
+        <h2>I Miei Ordini</h2>
+        <%
+            String nomeUtente = (String) session.getAttribute("name");
+            OrdiniDAO ordiniDAO = new OrdiniDAOimpl();
+            List<Ordine> ordiniUtente = ordiniDAO.getOrdiniUtenteFromSession(nomeUtente);
+            for (Ordine ordine : ordiniUtente) {
+        %>
+        <div class="order-info">
+            <div class="order-details">
+                <label>Id ordine:</label>
+                <div class="info info-detail"><%= ordine.getId() %></div>
+                <label>Data ordine:</label>
+                <div class="info info-detail"><%= ordine.getDataOrdine() %></div>
+                <label>Indirizzo:</label>
+                <div class="info info-detail"><%= ordine.getIndirizzo() %></div>
+                <label>Totale:</label>
+                <div class="info info-detail"><%= ordine.getTotale() %></div>
+            </div>
+            <div class="product-list">
+                <h3>Prodotti:</h3>
                 <ul>
-                  
-                    <li><a href="index.jsp">Home</a></li>
+                    <%
+                        for (Prodotto prodotto : ordine.getProdotti()) {
+                    %>
+                    <li>
+                        <label>Nome:</label>
+                        <span><%= prodotto.getNome() %></span>
+                        <label>Prezzo:</label>
+                        <span><%= prodotto.getPrezzo() %></span>
+                    </li>
+                    <%
+                        }
+                    %>
                 </ul>
-            </nav>
+            </div>
         </div>
-    </header>
-    
-    <%String nomeUtente = (String) session.getAttribute("name");
-    OrdiniDAO ordini=new OrdiniDAOimpl();
-   List<Ordine> ordiniUtente=ordini.getOrdiniUtenteFromSession(nomeUtente);
-   for(Ordine ordine:ordiniUtente){
-	   %>
-	  <div class="order-info">
-    <label>Id ordine:</label>
-    <div class="info info-detail"><%= ordine.getId() %></div>
-    <label>Data ordine:</label>
-    <div class="info info-detail"><%= ordine.getDataOrdine() %></div>
-    <label>Indirizzo:</label>
-    <div class="info info-detail"><%= ordine.getIndirizzo() %></div>
-    <label>Totale:</label>
-    <div class="info info-detail"><%= ordine.getTotale() %></div>
+        <%
+            }
+        %>
+    </div>
 </div>
-   <% }%>
 </body>
 </html>

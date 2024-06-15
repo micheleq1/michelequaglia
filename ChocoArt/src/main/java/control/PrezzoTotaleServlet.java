@@ -32,10 +32,8 @@ public class PrezzoTotaleServlet extends HttpServlet {
         if (totalPrice != null) {
             // Imposta il totale nella sessione
             session.setAttribute("totale", totalPrice);
-            System.out.println("Totale salvato nella sessione: " + session.getAttribute("totale"));
-        } else {
-            System.out.println("Parametro totalPrice non trovato nella richiesta.");
-        }
+            
+        } 
 	}
 
 	/**

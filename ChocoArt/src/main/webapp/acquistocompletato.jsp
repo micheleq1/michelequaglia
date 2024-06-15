@@ -28,12 +28,8 @@
     </header>
     <h3>Grazie per l'acquisto!</h3>
     <h4>Puoi controllare i dettagli del tuo ordine sulla sezione "I miei ordini" dopo aver effettuato l'accesso</h4>
-    <%String nomeUtente = (String) session.getAttribute("name");
-    OrdiniDAO ordini=new OrdiniDAOimpl();
-   List<Ordine> ordiniUtente=ordini.getOrdiniUtenteFromSession(nomeUtente);
-   for(Ordine ordine:ordiniUtente){
-	   %>
+    
 	
-   <%session.setAttribute("cart", null); }%>
+   <%session.setAttribute("cart", null); %>
 </body>
 </html>
