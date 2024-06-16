@@ -53,7 +53,7 @@
                         for (Prodotto prodotto : ordine.getProdotti()) {
                     %>
                     <li>
-                        <label>Nome:</label>
+                        <label>Nome prodotto:</label>
                         <span><%= prodotto.getNome() %></span>
                         <label>Prezzo:</label>
                         <span><%= prodotto.getPrezzo() %></span>
@@ -67,7 +67,10 @@
         <%
             }
         %>
+        <%if(ordiniUtente.isEmpty()) %>
+        <h4>Non hai ancora effettuato ordini</h4>
     </div>
+    
 </div>
 </body>
 </html>

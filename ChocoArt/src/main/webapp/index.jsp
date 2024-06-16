@@ -28,7 +28,7 @@
                         <li id="user-menu" style="color:#D2B48C; font-weight:bold">
                             Ciao <%=session.getAttribute("name") %>
                             <div id="dropdown-content" class="dropdown-content">
-                                <a href="#">Preferiti</a>
+                                <a href="preferiti.jsp">Preferiti</a>
                                 <a href="ordini.jsp">I miei ordini</a>
                                 
                             </div>
@@ -46,7 +46,7 @@
         </div>
     </header>
     <div class="filtri">
-        <input type="text" placeholder="Cerca...">
+        <input type="text" id="searchInput" placeholder="Cerca..." oninput="searchProducts(this.value)">
         <select>
             <option value="">Filtra per...</option>
             <option value="pasqua">Prezzo Crescente</option>
@@ -59,15 +59,36 @@
     <% 
     ProdottiDAO prodottiDAO = new ProdottiDAOimpl();
     List<Prodotto> prodotti = prodottiDAO.getAllProducts();
+    ArrayList<Prodotto> preferiti = (ArrayList<Prodotto>) session.getAttribute("preferiti");
+    if (preferiti == null) {
+        preferiti = new ArrayList<>();
+    }
     for (Prodotto prodotto : prodotti) {
+        boolean isFavorite = false;
+        for (Prodotto pref : preferiti) {
+            if (pref.getId() == prodotto.getId()) {
+                isFavorite = true;
+                break;
+            }
+        }
 %>
-    <div class="product">
-        <img src="data:image/jpg;base64, <%= new String(prodotto.getImmagine()) %>" alt="<%= prodotto.getNome() %>">
-        <h2><%= prodotto.getNome() %></h2>
-        <label class="price"><%= prodotto.getPrezzo() %> euro</label>
-        <a href="AggiungiAlCarrelloServlet?Id=<%= prodotto.getId() %>">Aggiungi al carrello</a>
-        <!-- Aggiungi qui altri dettagli del prodotto o pulsanti -->
+  <div class="product">
+    <img src="data:image/jpg;base64, <%= new String(prodotto.getImmagine()) %>" alt="<%= prodotto.getNome() %>">
+     <% if(session.getAttribute("name") != null) { %>
+    <div class="preferiti">
+    <% if (!isFavorite) { %>
+        <a href="AggiungiAiPreferitiServlet?Id=<%= prodotto.getId() %>" class="heart" data-id="<%= prodotto.getId() %>">&hearts;</a>
+    <% } else { %>
+        <a href="AggiungiAiPreferitiServlet?Id=<%= prodotto.getId() %>" class="heart-rimosso" data-id="<%= prodotto.getId() %>">&hearts;</a>
+    <% } %>
     </div>
+    <%} %>
+    <h2><%= prodotto.getNome() %></h2>
+    <label class="price"><%= prodotto.getPrezzo() %> euro</label>
+    <a href="AggiungiAlCarrelloServlet?Id=<%= prodotto.getId() %>">Aggiungi al carrello</a>
+    <!-- Aggiungi qui altri dettagli del prodotto o pulsanti -->
+</div>
+  
 <% } %>
     </div>
     <script src="javascript/scripts.js"></script>
