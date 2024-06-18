@@ -21,7 +21,7 @@
             <nav>
                 <ul>
                   
-                    <li><a href="index.jsp">Home</a></li>
+                    <li><a href="SvuotaCarrelloServlet">Home</a></li>
                 </ul>
             </nav>
         </div>
@@ -30,6 +30,6 @@
     <h4>Puoi controllare i dettagli del tuo ordine sulla sezione "I miei ordini" dopo aver effettuato l'accesso</h4>
     
 	
-   <%session.setAttribute("cart", null); %>
+   
 </body>
 </html>

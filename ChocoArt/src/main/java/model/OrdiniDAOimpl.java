@@ -29,7 +29,7 @@ public class OrdiniDAOimpl implements OrdiniDAO {
 	
 	public boolean aggiungiOrdine(Ordine ordine) {
 	    String sqlOrdine = "INSERT INTO ordini (id_utente, totale, indirizzo) VALUES (?, ?, ?)";
-	    String sqlOrdineProdotti = "INSERT INTO ordine_prodotti (id_ordine, id_prodotto, prezzo_prodotto) VALUES (?, ?, ?)";
+	    String sqlOrdineProdotti = "INSERT INTO ordine_prodotti (id_ordine, id_prodotto, prezzo_prodotto, quantità_prodotto) VALUES (?, ?, ?,?)";
 
 	    try (Connection conn = getConnection();
 	         PreparedStatement stmtOrdine = conn.prepareStatement(sqlOrdine, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -53,6 +53,7 @@ public class OrdiniDAOimpl implements OrdiniDAO {
 	                            stmtOrdineProdotti.setLong(1, ordineId);
 	                            stmtOrdineProdotti.setInt(2, p.getId());
 	                            stmtOrdineProdotti.setDouble(3, p.getPrezzo());
+	                            stmtOrdineProdotti.setInt(4, p.getQuantità());
 	                            stmtOrdineProdotti.addBatch();
 	                        }
 	                        stmtOrdineProdotti.executeBatch();
@@ -195,7 +196,7 @@ public class OrdiniDAOimpl implements OrdiniDAO {
 
         // Se l'ID utente è valido, esegui la query per ottenere gli ordini dell'utente
         if (idUtente != -1) {
-            String sql = "SELECT o.id AS id_ordine, o.id_utente, o.data_ordine, o.totale, o.indirizzo, " +
+            String sql = "SELECT o.id AS id_ordine, o.id_utente, o.data_ordine, op.quantità_prodotto, o.totale, o.indirizzo, " +
                          "p.id AS id_prodotto, p.nome, op.prezzo_prodotto AS prezzo_prodotto " +
                          "FROM ordine_prodotti op " +
                          "JOIN ordini o ON op.id_ordine = o.id " +
@@ -225,6 +226,7 @@ public class OrdiniDAOimpl implements OrdiniDAO {
                         prodotto.setId(rs.getInt("id_prodotto"));
                         prodotto.setNome(rs.getString("nome"));
                         prodotto.setPrezzo(rs.getDouble("prezzo_prodotto"));
+                        prodotto.setQuantità(rs.getInt("op.quantità_prodotto"));
                         ordineCorrente.getProdotti().add(prodotto);
                     }
                     if (ordineCorrente != null) {

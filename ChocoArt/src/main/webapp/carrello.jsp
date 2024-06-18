@@ -36,7 +36,7 @@
                 for (Prodotto product : cart) { %>
                     <li>
                         <div class="product-container">
-                            <img class="product-image" src="data:image/jpg;base64, <%= new String(product.getImmagine()) %>" alt="<%= product.getNome() %>">
+                            <img class="product-image" src="data:image/jpg;base64,<%= new String(product.getImmagine()) %>" alt="<%= product.getNome() %>">
                             <div class="product-details">
                                 <p class="product-name"><%= product.getNome() %></p>
                                 <p class="product-price">Prezzo: <%= product.getPrezzo() %></p>
@@ -44,14 +44,14 @@
                                 <label for="quantity_<%= product.getId() %>">Quantità:</label>
                                 <input type="number" id="quantity_<%= product.getId() %>" name="quantity_<%= product.getId() %>" value="1" min="1" class="quantity-input"> <br>
                                 <div class="product">
-                                <a href="RimuoviDalCarrelloServlet?Id=<%= product.getId() %>"> Elimina</a>
+                                    <a href="RimuoviDalCarrelloServlet?Id=<%= product.getId() %>">Elimina</a>
                                 </div>
                             </div>
                         </div>
                     </li>
                 <% }
-                } else { %>
-                    <li class="empty-cart-message">Il carrello è vuoto.</li>
+            } else { %>
+                <li class="empty-cart-message">Il carrello è vuoto.</li>
             <% } %>
         </ul>
     </div>
@@ -80,6 +80,7 @@
             cartItems.forEach(function(item) {
                 var productName = item.querySelector('.product-name').textContent;
                 var quantity = item.querySelector('.quantity-input').value;
+                
                 var price = parseFloat(item.querySelector('.product-price').textContent.split(' ')[1]); // Prendi solo il valore numerico del prezzo
                 var total = quantity * price;
                 totalPrice += total; // Aggiorna il totale generale
@@ -88,6 +89,33 @@
 
             orderItemsSummaryDiv.innerHTML = orderItemsHTML;
             totalSummaryDiv.querySelector('#total-price').textContent = totalPrice.toFixed(2); // Aggiorna il totale generale nel riepilogo dell'ordine
+        }
+
+        // Invia le quantità dei prodotti al backend
+        function sendQuantitiesToBackend(callback) {
+            var cartItems = document.querySelectorAll('.product-details');
+            var xhr = new XMLHttpRequest();
+            var url = "AcquistoCompletatoServlet";
+            var params = "";
+
+            cartItems.forEach(function(item, index) {
+                var productId = item.querySelector('.product-id').textContent.split(' ')[1]; // Prendi solo il valore numerico dell'ID
+                var quantity = item.querySelector('.quantity-input').value;
+                params += "quantity_" + productId + "=" + quantity;
+                if (index < cartItems.length - 1) {
+                    params += "&";
+                }
+            });
+
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log("Quantità inviate con successo.");
+                    if (callback) callback(); // Chiamata callback per procedere dopo l'invio delle quantità
+                }
+            };
+            xhr.send(params);
         }
 
         // Aggiungi un listener agli input delle quantità per aggiornare il riepilogo dell'ordine
@@ -103,26 +131,26 @@
 
         // Funzione per inviare il totale tramite AJAX
         document.getElementById("buy-btn").addEventListener("click", function() {
-            var totalPrice = document.getElementById("total-price").innerText;
+            sendQuantitiesToBackend(function() {
+                // Attendi un momento per assicurarti che le quantità siano state inviate prima di procedere
+                var totalPrice = document.getElementById("total-price").innerText;
 
-            var xhr = new XMLHttpRequest();
-            var url = "PrezzoTotaleServlet?totalPrice=" + encodeURIComponent(totalPrice);
-            xhr.open("GET", url, true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        console.log("Valore salvato con successo nella sessione.");
-                        window.location.href = "AcquistaServlet"; // Reindirizza alla servlet AcquistaServlet
-                    } else {
-                        console.error("Si è verificato un errore durante il salvataggio del valore nella sessione.");
+                var xhr = new XMLHttpRequest();
+                var url = "PrezzoTotaleServlet?totalPrice=" + encodeURIComponent(totalPrice);
+                xhr.open("GET", url, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            console.log("Valore salvato con successo nella sessione.");
+                            window.location.href = "AcquistaServlet"; // Reindirizza alla servlet AcquistaServlet
+                        } else {
+                            console.error("Si è verificato un errore durante il salvataggio del valore nella sessione.");
+                        }
                     }
-                }
-            };
-            xhr.send();
+                };
+                xhr.send();
+            });
         });
-        
-        
     </script>
-    
 </body>
 </html>

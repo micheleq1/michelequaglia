@@ -57,6 +57,8 @@
                         <span><%= prodotto.getNome() %></span>
                         <label>Prezzo:</label>
                         <span><%= prodotto.getPrezzo() %></span>
+                        <label>Quantità:</label>
+                        <span><%= prodotto.getQuantità()%></span>
                     </li>
                     <%
                         }
@@ -67,8 +69,9 @@
         <%
             }
         %>
-        <%if(ordiniUtente.isEmpty()) %>
+        <%if(ordiniUtente.isEmpty()){ %>
         <h4>Non hai ancora effettuato ordini</h4>
+        <%} %>
     </div>
     
 </div>

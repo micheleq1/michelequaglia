@@ -11,6 +11,7 @@ public class OrdineProdotti {
 	private String indirizzo;
 	private String nome;
 	private double prezzo;
+	private int quantità;
 	public int getId_ordine() {
 		return id_ordine;
 	}
@@ -58,6 +59,12 @@ public class OrdineProdotti {
 	}
 	public void setPrezzo(double prezzo) {
 		this.prezzo = prezzo;
+	}
+	public int getQuantità() {
+		return quantità;
+	}
+	public void setQuantità(int quantità) {
+		this.quantità = quantità;
 	}
 
 }

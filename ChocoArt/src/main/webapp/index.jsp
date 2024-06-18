@@ -84,7 +84,8 @@
     </div>
     <%} %>
     <h2><%= prodotto.getNome() %></h2>
-    <label class="price"><%= prodotto.getPrezzo() %> euro</label>
+    <p><%=prodotto.getDescrizione() %></p>
+    <label class="p3ice"><%= prodotto.getPrezzo() %> euro</label>
     <a href="AggiungiAlCarrelloServlet?Id=<%= prodotto.getId() %>">Aggiungi al carrello</a>
     <!-- Aggiungi qui altri dettagli del prodotto o pulsanti -->
 </div>

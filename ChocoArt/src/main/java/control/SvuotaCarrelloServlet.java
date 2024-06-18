@@ -9,34 +9,29 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class PrezzoTotaleServlet
+ * Servlet implementation class SvuotaCarrelloServlet
  */
-@WebServlet("/PrezzoTotaleServlet")
-public class PrezzoTotaleServlet extends HttpServlet {
+@WebServlet("/SvuotaCarrelloServlet")
+public class SvuotaCarrelloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PrezzoTotaleServlet() {
+    public SvuotaCarrelloServlet() {
         super();
-        
+        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 String totalPrice = request.getParameter("totalPrice");
-	        HttpSession session = request.getSession();
-	        if (totalPrice != null) {
-	            session.setAttribute("totale", totalPrice);
-	            
-	        } else {
-	            System.out.println("Errore nel salvataggio del totale.");
-	        }
-	    }
-	
+		HttpSession session=request.getSession();
+		
+		session.setAttribute("cart", null);
+		response.sendRedirect("index.jsp");
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

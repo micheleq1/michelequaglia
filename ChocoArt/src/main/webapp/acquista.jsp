@@ -27,7 +27,7 @@
     String username= (String)session.getAttribute("name");
     OrdiniDAO ordini=new OrdiniDAOimpl();
     String indirizzo= ordini.getIndirizzoUtenteFromSession(username); %>
-    <form method="post" action="AcquistoCompletatoServlet">
+    <form method="post" action="acquistocompletato.jsp">
         <label for="carta">Dati Carta:</label>
         <input type="text" name="carta" id="carta" pattern="[0-9]*">
         <label for="indirizzo">Indirizzo:</label>

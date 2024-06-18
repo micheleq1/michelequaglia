@@ -8,6 +8,7 @@ public class Prodotto implements Serializable{
 	private double prezzo;
 	private int id;
 	private byte[] immagine;
+	private int quantità;
 	
 public String getNome() {
 	return this.nome;
@@ -39,5 +40,11 @@ public byte[] getImmagine() {
 
 public void setImmagine(byte[] immagine) {
     this.immagine = immagine;
+}
+public int getQuantità() {
+	return quantità;
+}
+public void setQuantità(int quantità) {
+	this.quantità = quantità;
 }
 }

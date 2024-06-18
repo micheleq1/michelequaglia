@@ -205,6 +205,11 @@ button:hover {
   color: #333; /* Colore del testo scuro */
 }
 
+.product p{
+	font-style:oblique;
+	color:#654321;
+}
+
 /* Stile per il prezzo del prodotto */
 .product .price {
   font-weight: bold;
