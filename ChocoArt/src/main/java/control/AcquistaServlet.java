@@ -28,7 +28,7 @@ public class AcquistaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         
-        // Controlla se l'utente è loggato
+        
         if (session.getAttribute("name") == null) {
             response.sendRedirect("login.jsp");
         } else {

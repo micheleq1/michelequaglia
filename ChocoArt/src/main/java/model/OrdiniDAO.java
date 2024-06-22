@@ -14,5 +14,6 @@ public interface OrdiniDAO {
     public int getIdUtenteFromSession(String nomeutente);
     public String getIndirizzoUtenteFromSession(String nomeUtente);
     public List<Ordine> getOrdiniUtenteFromSession(String nomeUtente);
+    public List<Ordine> cercaOrdini(String dataInizio, String dataFine, String idUtente);
    
 }

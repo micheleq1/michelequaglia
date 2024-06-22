@@ -47,22 +47,22 @@ public class AggiungiServlet extends HttpServlet {
                             prezzo = Double.parseDouble(item.getString());
                         }
                     } else {
-                        // Verifica che l'elemento sia effettivamente un file
+                      
                         if (!item.isFormField()) {
-                            // Ottieni il nome del file e l'estensione
+                            
                             String fileName = item.getName();
                             String fileExtension = FilenameUtils.getExtension(fileName);
 
-                            // Verifica se il file è un'immagine
+                            
                             if (!isImage(fileExtension)) {
-                                // Se il file non è un'immagine, imposta un messaggio di errore e reindirizza alla stessa pagina
+                                
                                 request.setAttribute("aggiunto", false);
                                 dispatcher = request.getRequestDispatcher("aggiungiprodotto.jsp");
                                 dispatcher.forward(request, response);
-                                return; // Termina il metodo qui per evitare l'esecuzione del codice successivo in caso di errore
+                                return; 
                             }
 
-                            // Leggi il contenuto del file in un array di byte
+                          
                             InputStream inputStream = item.getInputStream();
                             byte[] fileContent = new byte[(int) item.getSize()];
                             inputStream.read(fileContent);
@@ -72,13 +72,13 @@ public class AggiungiServlet extends HttpServlet {
                     }
                 }
 
-                // Verifica se tutti i campi obbligatori sono stati compilati
+               
                 if (nome == null || nome.isEmpty() || desc == null || desc.isEmpty() || prezzo == 0 || immagine == null) {
-                    // Se un campo obbligatorio è vuoto, imposta un messaggio di errore e reindirizza alla stessa pagina
+                  
                     request.setAttribute("aggiunto", false);
                     dispatcher = request.getRequestDispatcher("aggiungiprodotto.jsp");
                     dispatcher.forward(request, response);
-                    return; // Termina il metodo qui per evitare l'esecuzione del codice successivo in caso di errore
+                    return; 
                 }
 
                 Prodotto prodotto = new Prodotto();
@@ -89,14 +89,14 @@ public class AggiungiServlet extends HttpServlet {
 
                 ProdottiDAO prodottiDAO = new ProdottiDAOimpl();
                 
-                // Aggiungi il prodotto al database
+              
                 prodottiDAO.addProduct(prodotto);
 
-                // Se l'aggiunta ha avuto successo, imposta l'attributo "aggiunto" a true
+             
                 request.setAttribute("aggiunto", true);
                 
             } catch (Exception e) {
-                // In caso di errore durante l'aggiunta, imposta l'attributo "aggiunto" a false
+           
                 request.setAttribute("aggiunto", false);
                 e.printStackTrace();
             }
@@ -104,12 +104,10 @@ public class AggiungiServlet extends HttpServlet {
             request.setAttribute("aggiunto", false);
         }
         
-        // Reindirizza alla pagina JSP
         dispatcher = request.getRequestDispatcher("aggiungiprodotto.jsp");
         dispatcher.forward(request, response);
     }
 
-    // Metodo per verificare se l'estensione del file corrisponde a un formato di immagine
     private boolean isImage(String fileExtension) {
         String[] imageExtensions = {"jpg", "jpeg", "png", "gif", "bmp"};
         for (String extension : imageExtensions) {

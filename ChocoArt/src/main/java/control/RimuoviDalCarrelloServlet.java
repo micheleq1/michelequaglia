@@ -39,15 +39,15 @@ public class RimuoviDalCarrelloServlet extends HttpServlet {
         String id = request.getParameter("Id");
         
         
-        // Ottieni l'ID del prodotto da rimuovere dal carrello
+       
         int productIdToRemove = Integer.parseInt(id);
         
-        // Ottieni il carrello dalla sessione
+   
         ArrayList<Prodotto> cart = (ArrayList<Prodotto>) session.getAttribute("cart");
 
-        // Rimuovi il prodotto dal carrello utilizzando l'ID
+        
         if (cart != null) {
-            // Cerca il prodotto con l'ID corrispondente e rimuovilo dal carrello
+            
             for (int i = 0; i < cart.size(); i++) {
                 Prodotto product = cart.get(i);
                 if (product.getId() == productIdToRemove) {
@@ -55,11 +55,11 @@ public class RimuoviDalCarrelloServlet extends HttpServlet {
                     break;
                 }
             }
-            // Aggiorna il carrello nella sessione
+           
             session.setAttribute("cart", cart);
         }
 
-        // Reindirizza l'utente alla pagina del carrello
+     
         RequestDispatcher dispatcher = request.getRequestDispatcher("carrello.jsp");
         dispatcher.forward(request, response);
     }

@@ -13,13 +13,13 @@ public class Ordine {
     private String indirizzo;
     private List<Prodotto> prodotti=new ArrayList<Prodotto>();
 
-    // Costruttore vuoto
+    
     public Ordine() {}
 
     
    
 
-    // Metodi getter e setter
+   
     public int getId() {
         return id;
     }

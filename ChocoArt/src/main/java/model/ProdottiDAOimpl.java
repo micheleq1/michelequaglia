@@ -58,19 +58,19 @@ public class ProdottiDAOimpl implements ProdottiDAO {
 	            String nome = rs.getString("nome");
 	            double prezzo = rs.getDouble("prezzo");
 	            String descrizione = rs.getString("descrizione");
-	            byte[] immagine = rs.getBytes("immagine"); // Aggiungi questa riga per recuperare l'immagine come array di byte
+	            byte[] immagine = rs.getBytes("immagine"); 
 	            Prodotto prodotto = new Prodotto();
 	            prodotto.setNome(nome);
 	            prodotto.setId(id);
 	            prodotto.setDescrizione(descrizione);
 	            prodotto.setPrezzo(prezzo);
-	            prodotto.setImmagine(immagine); // Imposta l'immagine nell'oggetto Prodotto
+	            prodotto.setImmagine(immagine); 
 	            productList.add(prodotto);
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    } finally {
-	        // Chiudi gli oggetti ResultSet, PreparedStatement e Connection nel blocco finally
+	       
 	        if (rs != null) {
 	            try {
 	                rs.close();
@@ -110,10 +110,10 @@ public class ProdottiDAOimpl implements ProdottiDAO {
 	        ps.setDouble(2, prodotto.getPrezzo());
 	        ps.setString(3, prodotto.getDescrizione());
 	        
-	        // Codifica l'array di byte dell'immagine in una stringa Base64
+	       
 	        String immagineBase64 = Base64.getEncoder().encodeToString(prodotto.getImmagine());
 	        
-	        // Imposta la stringa Base64 nell'istruzione SQL
+	        
 	        ps.setString(4, immagineBase64); 
 	        
 	        ps.executeUpdate();
@@ -150,15 +150,15 @@ public class ProdottiDAOimpl implements ProdottiDAO {
 
 	        byte[] immagine = prodotto.getImmagine();
 	        if (immagine != null && immagine.length > 0) {
-	            // If a new image is provided, set it
+	           
 	            ps.setBytes(4, immagine);
 	        } else {
-	            // If no new image is provided, fetch the existing image from the database
+	           
 	            Prodotto existingProduct = getProductbyId(prodotto.getId());
 	            ps.setBytes(4, existingProduct.getImmagine());
 	        }
 
-	        // Execute the update
+	    
 	        ps.executeUpdate();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -171,7 +171,7 @@ public class ProdottiDAOimpl implements ProdottiDAO {
 		         PreparedStatement ps = conn.prepareStatement("DELETE FROM prodotti WHERE id = ?")) {
 		        ps.setInt(1, id);
 		        
-		        // Esegue l'eliminazione del prodotto nel database
+		
 		        ps.executeUpdate();
 		    } catch (SQLException e) {
 		        e.printStackTrace();

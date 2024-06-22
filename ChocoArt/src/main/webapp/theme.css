@@ -529,6 +529,56 @@ button:hover {
 .order-info .info-detail {
     color: #333; /* Colore del testo */
 }
+
+.search-filters {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.search-filters h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.search-filters form {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-filters label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.search-filters input[type="date"],
+.search-filters input[type="text"] {
+    margin-bottom: 15px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+.search-filters button[type="submit"] {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    background-color: #D2B48C;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-filters button[type="submit"]:hover {
+    background-color: #654321;
+}
+
 @media screen and (max-width: 600px) {
 	
     .filtri {

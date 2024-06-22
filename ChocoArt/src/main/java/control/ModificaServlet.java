@@ -36,7 +36,7 @@ public class ModificaServlet extends HttpServlet {
 
         try {
             if (filePart != null && filePart.getSize() > 0) {
-                // Verifica che il file caricato sia un'immagine
+              
                 String fileName = extractFileName(filePart);
                 String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
                 if (!isValidImageExtension(fileExtension)) {
@@ -46,7 +46,7 @@ public class ModificaServlet extends HttpServlet {
                     return;
                 }
 
-                // Carica la nuova immagine
+              
                 try (InputStream inputStream = filePart.getInputStream()) {
                     imageBytes = inputStream.readAllBytes();
                 } catch (IOException e) {
@@ -56,11 +56,11 @@ public class ModificaServlet extends HttpServlet {
                     return;
                 }
             } else {
-                // Mantieni l'immagine esistente
+              
                 imageBytes = prodotto.getImmagine();
             }
 
-            // Aggiorna il prodotto nel database
+   
             prodotto.setNome(nome);
             prodotto.setPrezzo(prezzo);
             prodotto.setDescrizione(descrizione);
@@ -78,7 +78,7 @@ public class ModificaServlet extends HttpServlet {
         }
     }
 
-    // Metodo per estrarre il nome del file da Part
+  
     private String extractFileName(Part part) {
         String contentDisp = part.getHeader("content-disposition");
         String[] tokens = contentDisp.split(";");
@@ -90,7 +90,7 @@ public class ModificaServlet extends HttpServlet {
         return "";
     }
 
-    // Metodo per verificare se l'estensione del file corrisponde a un formato di immagine
+
     private boolean isValidImageExtension(String fileExtension) {
         String[] imageExtensions = {"jpg", "jpeg", "png", "gif", "bmp"};
         for (String extension : imageExtensions) {
@@ -101,7 +101,7 @@ public class ModificaServlet extends HttpServlet {
         return false;
     }
 
-    // Metodo per reindirizzare a una pagina JSP con attributi della richiesta
+  
     private void forwardToPage(String page, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher(page);

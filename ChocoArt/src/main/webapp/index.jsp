@@ -47,13 +47,8 @@
     </header>
     <div class="filtri">
         <input type="text" id="searchInput" placeholder="Cerca..." oninput="searchProducts(this.value)">
-        <select>
-            <option value="">Filtra per...</option>
-            <option value="pasqua">Prezzo Crescente</option>
-            <option value="sanvalentino">Prezzo Decrescente</option>
-        </select>
-        <button>OFFERTE PASQUA</button>
-        <button>OFFERTE S.VALENTINO</button>
+       
+        
     </div>
     <div class="product-container">
     <% 

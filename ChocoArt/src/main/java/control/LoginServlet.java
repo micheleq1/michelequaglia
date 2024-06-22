@@ -87,7 +87,7 @@ public class LoginServlet extends HttpServlet {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hashedBytes = md.digest(password.getBytes());
 
-            // Converte i byte in una rappresentazione esadecimale
+          
             StringBuilder sb = new StringBuilder();
             for (byte b : hashedBytes) {
                 sb.append(String.format("%02x", b));

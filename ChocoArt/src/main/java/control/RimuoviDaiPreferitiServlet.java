@@ -40,7 +40,7 @@ public class RimuoviDaiPreferitiServlet extends HttpServlet {
 	        Prodotto prodotto = prodottiDAO.getProductbyId(Integer.parseInt(id));
 	        
 
-	        // Ottieni la lista dei preferiti dalla sessione
+	
 	        ArrayList<Prodotto> preferiti = (ArrayList<Prodotto>) session.getAttribute("preferiti");
 	        for (int i = 0; i < preferiti.size(); i++) {
                 if (preferiti.get(i).getId() == prodotto.getId()) {

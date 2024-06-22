@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrello</title>
     <link rel="stylesheet" type="text/css" href="theme.css"> <!-- Link al file CSS -->
-    <script src="javascript/carrello.js"></script>
+    <script src="javascript/scripts.js"></script>
 </head>
 <body>
     <header>
@@ -80,7 +80,6 @@
             cartItems.forEach(function(item) {
                 var productName = item.querySelector('.product-name').textContent;
                 var quantity = item.querySelector('.quantity-input').value;
-                
                 var price = parseFloat(item.querySelector('.product-price').textContent.split(' ')[1]); // Prendi solo il valore numerico del prezzo
                 var total = quantity * price;
                 totalPrice += total; // Aggiorna il totale generale
@@ -91,8 +90,8 @@
             totalSummaryDiv.querySelector('#total-price').textContent = totalPrice.toFixed(2); // Aggiorna il totale generale nel riepilogo dell'ordine
         }
 
-        // Invia le quantità dei prodotti al backend
-        function sendQuantitiesToBackend(callback) {
+        // Funzione per inviare il totale e le quantità dei prodotti al backend
+        function sendOrderDetailsToBackend(callback) {
             var cartItems = document.querySelectorAll('.product-details');
             var xhr = new XMLHttpRequest();
             var url = "AcquistoCompletatoServlet";
@@ -107,12 +106,15 @@
                 }
             });
 
+            var totalPrice = document.getElementById("total-price").textContent;
+            params += "&totalPrice=" + encodeURIComponent(totalPrice);
+
             xhr.open("POST", url, true);
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    console.log("Quantità inviate con successo.");
-                    if (callback) callback(); // Chiamata callback per procedere dopo l'invio delle quantità
+                    console.log("Dati inviati con successo.");
+                    if (callback) callback(); // Chiamata callback per procedere dopo l'invio dei dati
                 }
             };
             xhr.send(params);
@@ -129,26 +131,10 @@
             updateOrderSummary();
         };
 
-        // Funzione per inviare il totale tramite AJAX
+        // Funzione per gestire il click sul pulsante di acquisto
         document.getElementById("buy-btn").addEventListener("click", function() {
-            sendQuantitiesToBackend(function() {
-                // Attendi un momento per assicurarti che le quantità siano state inviate prima di procedere
-                var totalPrice = document.getElementById("total-price").innerText;
-
-                var xhr = new XMLHttpRequest();
-                var url = "PrezzoTotaleServlet?totalPrice=" + encodeURIComponent(totalPrice);
-                xhr.open("GET", url, true);
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status === 200) {
-                            console.log("Valore salvato con successo nella sessione.");
-                            window.location.href = "AcquistaServlet"; // Reindirizza alla servlet AcquistaServlet
-                        } else {
-                            console.error("Si è verificato un errore durante il salvataggio del valore nella sessione.");
-                        }
-                    }
-                };
-                xhr.send();
+            sendOrderDetailsToBackend(function() {
+                window.location.href = "AcquistaServlet"; // Reindirizza alla servlet AcquistaServlet
             });
         });
     </script>

@@ -22,16 +22,16 @@ public class AcquistoCompletatoServlet extends HttpServlet {
         super();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         OrdiniDAO aggiungi = new OrdiniDAOimpl();
         Ordine ordine = new Ordine();
 
         ArrayList<Prodotto> cart = (ArrayList<Prodotto>) session.getAttribute("cart");
         
-        // Verifica la lista del carrello
+      
         if (cart != null) {
-            // Aggiorna le quantità dei prodotti nel carrello
+            
             for (Prodotto product : cart) {
                 String quantityStr = request.getParameter("quantity_" + product.getId());
                 if (quantityStr != null) {
@@ -42,9 +42,8 @@ public class AcquistoCompletatoServlet extends HttpServlet {
             }
         }
 
-        // Recupera il totale dalla sessione
-        String totalPriceStr = (String) session.getAttribute("totale");
-        System.out.println(totalPriceStr);
+        
+        String totalPriceStr = request.getParameter("totalPrice");
         double totalPrice = 0.0;
 
         if (totalPriceStr != null && !totalPriceStr.isEmpty()) {
@@ -54,21 +53,23 @@ public class AcquistoCompletatoServlet extends HttpServlet {
                 System.err.println("Errore nel parsing del totale: " + e.getMessage());
             }
         } else {
-            System.err.println("Errore: totale non presente nella sessione o valore non valido.");
+            System.err.println("Errore: totale non presente nella richiesta o valore non valido.");
         }
 
         ordine.setTotale(totalPrice);
 
         int idUtente = aggiungi.getIdUtenteFromSession((String) session.getAttribute("name"));
         ordine.setIdUtente(idUtente);
-        ordine.setIndirizzo(request.getParameter("indirizzo"));
+        String indirizzo= aggiungi.getIndirizzoUtenteFromSession((String)session.getAttribute("name"));
+        
+        ordine.setIndirizzo(indirizzo);
 
         aggiungi.aggiungiOrdine(ordine);
 
         response.sendRedirect("acquistocompletato.jsp");
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
     }
 }
